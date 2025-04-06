@@ -11,7 +11,6 @@ function Profile() {
   const [formError, setFormError] = useState("");
   const [greeting, setGreeting] = useState("");
 
-  // Function to fetch profile data
   async function profile() {
     try {
       const { data } = await axios.get("http://localhost:4000/profile", {
@@ -26,7 +25,6 @@ function Profile() {
     }
   }
 
-  // Function to set greeting based on time
   function updateGreeting() {
     const hour = new Date().getHours();
     if (hour >= 5 && hour < 12) {
@@ -40,7 +38,6 @@ function Profile() {
     }
   }
 
-  // UseEffect to fetch profile and set greeting
   useEffect(() => {
     profile();
     updateGreeting();
@@ -73,7 +70,6 @@ function Profile() {
         clearError();
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
       setFormError("Failed to update profile. Please try again later.");
       clearError();
     }
@@ -87,51 +83,53 @@ function Profile() {
   };
 
   return (
-    <div className="s-profile">
-      <div className="avatar online placeholder">
-        <div className="bg-black text-white w-32 rounded-full">
-          <span className="text-6xl font-bold uppercase">
-            {name.slice(0, 2).toUpperCase()}
-          </span>
+    <div className="s-profile p-4 sm:p-8 bg-gray-950">
+      <div className="flex flex-col items-center">
+        <div className="avatar online placeholder mb-4">
+          <div className="bg-black text-white w-24 h-24 sm:w-32 sm:h-32 rounded-full flex items-center justify-center">
+            <span className="text-4xl sm:text-6xl font-bold uppercase">
+              {name.slice(0, 2).toUpperCase()}
+            </span>
+          </div>
         </div>
-      </div>
-      <h1 className="text-4xl">{greeting}</h1>
-      <h1 className="text-3xl">Welcome Back {name}!</h1>
-      <div className="w-3/6 bg-base-400 p-7 rounded-2xl border-2 border-sky-500 s-form text-center">
-        <label className="input input-bordered flex items-center gap-2 mt-3">
-          Full Name:
-          <input
-            type="text"
-            className="grow"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </label>
-        <label className="input input-bordered flex items-center gap-2 mt-3">
-          Mobile number:
-          <input
-            type="number"
-            className="grow"
-            value={number}
-            onChange={(e) => setNumber(e.target.value)}
-          />
-        </label>
-        <label className="input input-bordered flex items-center gap-2 mt-3">
-          College Name:
-          <input
-            type="text"
-            className="grow"
-            value={universityName}
-            onChange={(e) => setUniversityName(e.target.value)}
-          />
-        </label>
-        <p className="text-secondary">{formError}</p>
-        <button
-          className="btn w-full mt-3 btn-info"
-          onClick={handleProfileSave}
-        >
-          Save Profile
-        </button>
+        <h1 className="text-2xl sm:text-4xl mb-2">{greeting}</h1>
+        <h1 className="text-xl sm:text-3xl mb-6">Welcome Back {name}!</h1>
+        <div className="w-full sm:w-3/6 bg-base-400 p-4 sm:p-7 rounded-2xl border-2 border-sky-500 s-form text-center">
+          <label className="input input-bordered flex items-center gap-2 mb-3">
+            Full Name:
+            <input
+              type="text"
+              className="grow"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </label>
+          <label className="input input-bordered flex items-center gap-2 mb-3">
+            Mobile number:
+            <input
+              type="number"
+              className="grow"
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+            />
+          </label>
+          <label className="input input-bordered flex items-center gap-2 mb-3">
+            College Name:
+            <input
+              type="text"
+              className="grow"
+              value={universityName}
+              onChange={(e) => setUniversityName(e.target.value)}
+            />
+          </label>
+          <p className="text-secondary mb-3">{formError}</p>
+          <button
+            className="btn w-full btn-info"
+            onClick={handleProfileSave}
+          >
+            Save Profile
+          </button>
+        </div>
       </div>
     </div>
   );

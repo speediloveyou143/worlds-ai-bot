@@ -107,7 +107,7 @@ const UpdateIc = ({ apiUrl }) => {
   };
 
   return (
-    <div className="p-6 bg-[#030712] h-full overflow-y-scroll m-4 rounded shadow-md">
+    <div className="p-1 sm:p-6 sm:pb-0 pb-[110px] bg-gray-950 h-full overflow-y-auto m-4 rounded shadow-md">
       <h1 className="text-white text-xl font-bold mb-6">Update Internship Certificates</h1>
       {message && (
         <p

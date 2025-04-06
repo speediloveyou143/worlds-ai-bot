@@ -119,7 +119,7 @@ function UpdateRecordings() {
   };
 
   return (
-    <div className="p-6 bg-[#030712] h-full overflow-y-scroll m-4 rounded shadow-md">
+    <div className="sm:p-6 p-0 sm:pb-0 pb-[120px] bg-[#030712] h-full overflow-y-scroll m-4 rounded shadow-md">
       <h1 className="text-white text-xl font-bold mb-6">Update Recordings</h1>
       {message && (
         <p

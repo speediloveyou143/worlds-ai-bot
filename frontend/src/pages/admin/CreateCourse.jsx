@@ -66,114 +66,127 @@ function CreateCourse() {
   };
 
   return (
-    <div className="w-2/3 bg-base-300 p-7 rounded-2xl border-2 border-sky-500 s-form text-center">
-      <h1 className="text-4xl">Create Course</h1>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Course Name:
-        <input
-          type="text"
-          name="courseName"
-          value={formData.courseName}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Image Url:
-        <input
-          type="url"
-          name="imageUrl"
-          value={formData.imageUrl}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Price:
-        <input
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Duration:
-        <input
-          type="number"
-          name="duration"
-          value={formData.duration}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Enrolled:
-        <input
-          type="number"
-          name="enrolled"
-          value={formData.enrolled}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Status:
-        <select
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          className="grow"
-        >
-          <option value="0">0</option>
-          <option value="1">1</option>
-        </select>
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Badge:
-        <select
-          name="badge"
-          value={formData.badge}
-          onChange={handleChange}
-          className="grow"
-        >
-          <option value="trending">Trending</option>
-          <option value="best-seller">Best Seller</option>
-        </select>
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Hours:
-        <input
-          type="number"
-          name="hours"
-          value={formData.hours}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Custom Course ID:
-        <input
-          type="text"
-          name="nextId"
-          value={formData.nextId}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <label className="input input-bordered flex items-center gap-2 mt-3">
-        Recording ID:
-        <input
-          type="text"
-          name="recordingId"
-          value={formData.recordingId}
-          onChange={handleChange}
-          className="grow"
-        />
-      </label>
-      <p className="text-error">{formError}</p>
-      <button onClick={handleSubmit} className="btn w-full mt-3 btn-info">
+    <div className="w-full max-w-2xl mx-auto bg-base-300 p-4 sm:p-7 rounded-2xl border-2 border-sky-500 text-center h-full overflow-y-auto">
+      <h1 className="text-2xl sm:text-4xl mb-4">Create Course</h1>
+      
+      <div className="space-y-3">
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Course Name:</span>
+          <input
+            type="text"
+            name="courseName"
+            value={formData.courseName}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Image Url:</span>
+          <input
+            type="url"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Price:</span>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Duration:</span>
+          <input
+            type="number"
+            name="duration"
+            value={formData.duration}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Enrolled:</span>
+          <input
+            type="number"
+            name="enrolled"
+            value={formData.enrolled}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Status:</span>
+          <select
+            name="status"
+            value={formData.status}
+            onChange={handleChange}
+            className="grow"
+          >
+            <option value="0">0</option>
+            <option value="1">1</option>
+          </select>
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Badge:</span>
+          <select
+            name="badge"
+            value={formData.badge}
+            onChange={handleChange}
+            className="grow"
+          >
+            <option value="trending">Trending</option>
+            <option value="best-seller">Best Seller</option>
+          </select>
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Hours:</span>
+          <input
+            type="number"
+            name="hours"
+            value={formData.hours}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Custom Course ID:</span>
+          <input
+            type="text"
+            name="nextId"
+            value={formData.nextId}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+
+        <label className="input input-bordered flex items-center gap-2">
+          <span className="w-28 sm:w-32 text-left">Recording ID:</span>
+          <input
+            type="text"
+            name="recordingId"
+            value={formData.recordingId}
+            onChange={handleChange}
+            className="grow"
+          />
+        </label>
+      </div>
+
+      <p className="text-error mt-3">{formError}</p>
+      <button onClick={handleSubmit} className="btn w-full mt-4 btn-info">
         Create Course
       </button>
     </div>

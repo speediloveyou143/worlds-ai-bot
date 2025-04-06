@@ -118,7 +118,7 @@ const RoadMapForm = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="p-6 bg-[#030712] h-full overflow-y-scroll m-4 rounded shadow-md"
+      className="sm:p-6 p-0 sm:pb-0 pb-[120px] bg-[#030712] h-full overflow-y-auto m-4 rounded shadow-md"
     >
       <div className="mb-4">
         <label className="block text-white font-medium mb-2">Course Name:</label>

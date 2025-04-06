@@ -25,7 +25,7 @@ function Course(props) {
   }
   
   return (
-    <div className="card shadow-2xl bg-base-300 w-80 my-4 shadow-xl h-fit">
+    <div className="card shadow-2xl bg-base-300 sm:w-80 w-full sm:m-3 m-4  my-4  shadow-xl h-fit">
       <figure>
         <img
           src={props.data.imageUrl}
@@ -94,7 +94,7 @@ function AllCourses() {
     return <div>no courses found</div>;
   }
   return (
-    <div className="h-full overflow-y-scroll flex flex-wrap align-center  justify-evenly">
+    <div className="h-full overflow-y-scroll flex flex-wrap h-full overflow-y-auto   pb-[100px]  justify-evenly ">
       {courses.map((x, index) => {
         return <Course key={index} data={x} />;
       })}

@@ -115,8 +115,6 @@ router.patch("/update-course/:id", async (req, res) => {
       }
       
 });
-  
-  
 
 router.delete("/delete-course/:id", async (req, res) => {
     const {id} = req.params;
