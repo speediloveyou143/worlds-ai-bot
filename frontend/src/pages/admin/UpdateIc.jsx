@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 const UpdateIc = ({ apiUrl }) => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const UpdateIc = ({ apiUrl }) => {
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-user/${id}`, {
+        const response = await axios.get(`${BACKEND_URL}/show-user/${id}`, {
           withCredentials: true,
         });
         if (response.status === 200) {
@@ -87,7 +88,7 @@ const UpdateIc = ({ apiUrl }) => {
     if (validate()) {
       try {
         const response = await axios.put(
-          `http://localhost:4000/update-user/${id}`,
+          `${BACKEND_URL}/update-user/${id}`,
           { iCertificates: iCertificates },
           { withCredentials: true }
         );

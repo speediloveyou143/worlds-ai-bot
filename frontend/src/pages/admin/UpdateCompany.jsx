@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateCompany() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function UpdateCompany() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/show-company/${id}`, { withCredentials: true })
+      .get(`${BACKEND_URL}/show-company/${id}`, { withCredentials: true })
       .then((response) => {
         setCompanyName(response.data.companyName);
         setLogo(response.data.logo);
@@ -29,7 +30,7 @@ function UpdateCompany() {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:4000/update-company/${id}`,
+        `${BACKEND_URL}/update-company/${id}`,
         { companyName, logo },
         { withCredentials: true }
       );

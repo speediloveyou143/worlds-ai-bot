@@ -2,13 +2,14 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function VideoRow(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this video?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-video/${props.data._id}`,
+          `${BACKEND_URL}/delete-video/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -46,7 +47,7 @@ function AllVideos() {
 
   async function fetchVideos() {
     try {
-      const response = await axios.get("http://localhost:4000/show-videos", {
+      const response = await axios.get(`${BACKEND_URL}/show-videos`, {
         withCredentials: true,
       });
       setVideoData(response?.data);

@@ -1,6 +1,8 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
+
 
 function CreatePrivacy() {
   const [heading, setHeading] = useState("");
@@ -15,10 +17,10 @@ function CreatePrivacy() {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:4000/create-privacy", {
+      const response = await axios.post(`${BACKEND_URL}/create-privacy`, {
         heading,
         paragraph,
-      });
+      },{withCredentials:true});
       if (response.status === 200) {
         setSuccess("Privacy entry created successfully!");
         setError("");

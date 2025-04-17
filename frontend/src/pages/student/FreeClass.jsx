@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Country, State } from "country-state-city";
 import Footer from '../../components/Footer';
+import { BACKEND_URL } from '../../../config/constant';
+
 
 const FreeClass = () => {
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ const FreeClass = () => {
   useEffect(() => {
     const fetchBootcamp = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-bootcamp/${id}`);
+        const response = await axios.get(`${BACKEND_URL}/show-bootcamp/${id}`);
         setBootcampData(response.data);
         setFormData((prev) => ({
           ...prev,
@@ -87,7 +89,7 @@ const FreeClass = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/create-register", {
+      const response = await axios.post(`${BACKEND_URL}/create-register`, {
         name: formData.name,
         email: formData.email,
         mobile: formData.mobile,

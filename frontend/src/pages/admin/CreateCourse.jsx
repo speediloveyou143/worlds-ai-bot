@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { CreateCourseValidate } from "../../utils/createCourseValidate";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateCourse() {
   const [formData, setFormData] = useState({
@@ -49,7 +50,7 @@ function CreateCourse() {
           ...formData,
         };
         const response = await axios.post(
-          "http://localhost:4000/create-course",
+          `${BACKEND_URL}/create-course`,
           course,
           { withCredentials: true }
         );

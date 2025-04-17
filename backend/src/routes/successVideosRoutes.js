@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const SuccessVideos = require('../models/successVideosModel');
+const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
 
-router.post('/create-video', async (req, res) => {
+router.post('/create-video',userAuth,adminAuth, async (req, res) => {
     try {
         const { videoUrl, jobRole, name, package, companyName } = req.body;
         if (!videoUrl || !jobRole || !name || !package || !companyName) {
@@ -25,7 +27,7 @@ router.get('/show-videos', async (req, res) => {
     }
 });
 
-router.get('/show-video/:id', async (req, res) => {
+router.get('/show-video/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const video = await SuccessVideos.findById(req.params.id);
         if (!video) {
@@ -37,7 +39,7 @@ router.get('/show-video/:id', async (req, res) => {
     }
 });
 
-router.patch('/update-video/:id', async (req, res) => {
+router.patch('/update-video/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const { videoUrl, jobRole, name, package, companyName } = req.body;
         const video = await SuccessVideos.findByIdAndUpdate(
@@ -54,7 +56,7 @@ router.patch('/update-video/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete-video/:id', async (req, res) => {
+router.delete('/delete-video/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const video = await SuccessVideos.findByIdAndDelete(req.params.id);
         if (!video) {

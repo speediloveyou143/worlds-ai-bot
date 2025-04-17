@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { SignupFormValidate } from "../../utils/signupFormvalidate";
 import { useNavigate } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 function Signup() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
@@ -32,11 +33,10 @@ function Signup() {
         password,
       };
 
-      const response = await axios.post("http://localhost:4000/signup", user, {
+      const response = await axios.post(`${BACKEND_URL}/signup`, user, {
         withCredentials: true,
       });
 
-      console.log(response);
       if (response.status === 200) {
         setIsSuccess(true);
         setTimeout(() => {
@@ -182,9 +182,9 @@ function Signup() {
 
               <p className="text-center text-gray-300 mt-1 md:mt-2">
                 Already have an account?{" "}
-                <a href="/signin" className="text-sky-500 hover:underline">
+                <Link to="/signin" className="text-sky-500 hover:underline">
                   Sign In
-                </a>
+                </Link>
               </p>
             </div>
           </>

@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const Register = require('../models/registerModel'); 
+const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
 
-router.post('/create-register', async (req, res) => {
+router.post('/create-register',async (req, res) => {
     try {
         const { name, email, mobile, country, state, course } = req.body;
 
@@ -25,7 +27,7 @@ router.post('/create-register', async (req, res) => {
     }
 });
 
-router.get('/all-registers', async (req, res) => {
+router.get('/all-registers',userAuth,adminAuth, async (req, res) => {
     try {
         const registers = await Register.find();
         res.status(200).json(registers);
@@ -34,7 +36,7 @@ router.get('/all-registers', async (req, res) => {
     }
 });
 
-router.delete('/delete-register/:id', async (req, res) => {
+router.delete('/delete-register/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const register = await Register.findByIdAndDelete(req.params.id);
         if (!register) {

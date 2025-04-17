@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const Test = require('../models/testModel');
+const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
 
 // Create a new test entry
-router.post('/create-test', async (req, res) => {
+router.post('/create-test',userAuth,adminAuth, async (req, res) => {
   try {
     const { question, test } = req.body;
 
@@ -32,7 +34,7 @@ router.post('/create-test', async (req, res) => {
 });
 
 // Get all test entries
-router.get('/all-tests', async (req, res) => {
+router.get('/all-tests',userAuth, async (req, res) => {
   try {
     const tests = await Test.find();
     res.status(200).json(tests);
@@ -42,7 +44,7 @@ router.get('/all-tests', async (req, res) => {
 });
 
 // Get a specific test by ID
-router.get('/show-test/:id', async (req, res) => {
+router.get('/show-test/:id',userAuth,adminAuth, async (req, res) => {
   try {
     const test = await Test.findById(req.params.id);
     if (!test) {
@@ -55,7 +57,7 @@ router.get('/show-test/:id', async (req, res) => {
 });
 
 // Update a test by ID
-router.put('/update-test/:id', async (req, res) => {
+router.put('/update-test/:id',userAuth,adminAuth, async (req, res) => {
   try {
     const { question, test } = req.body;
 
@@ -87,7 +89,7 @@ router.put('/update-test/:id', async (req, res) => {
 });
 
 // Delete a test by ID
-router.delete('/delete-test/:id', async (req, res) => {
+router.delete('/delete-test/:id',userAuth,adminAuth, async (req, res) => {
   try {
     const test = await Test.findByIdAndDelete(req.params.id);
     if (!test) {

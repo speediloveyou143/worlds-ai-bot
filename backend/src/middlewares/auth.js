@@ -4,6 +4,7 @@ const User = require('../models/userModel');
 const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
+    console.log(token)
 
     if (!token) return res.status(401).json('Please login, token expired');
 

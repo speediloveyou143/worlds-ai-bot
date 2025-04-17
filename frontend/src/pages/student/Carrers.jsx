@@ -1,47 +1,65 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Footer from "../../components/Footer";
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import Footer from '../../components/Footer';
+import { BACKEND_URL } from '../../../config/constant';
+
 
 const Careers = () => {
   const [departments, setDepartments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const [applicationEmail, setApplicationEmail] = useState('ishowspeedindia6@gmail.com');
 
   const benefits = [
     {
-      icon: "💰",
-      title: "Competitive Pay",
-      description: "Industry-leading compensation with performance bonuses",
+      icon: '💰',
+      title: 'Competitive Pay',
+      description: 'Industry-leading compensation with performance bonuses',
     },
     {
-      icon: "📚",
-      title: "Learning Budget",
-      description: "Annual budget for courses, conferences, and certifications",
+      icon: '📚',
+      title: 'Learning Budget',
+      description: 'Annual budget for courses, conferences, and certifications',
     },
     {
-      icon: "🏥",
-      title: "Health Benefits",
-      description: "Comprehensive health, dental, and vision coverage",
+      icon: '🏥',
+      title: 'Health Benefits',
+      description: 'Comprehensive health, dental, and vision coverage',
     },
     {
-      icon: "⚖️",
-      title: "Work-Life Balance",
-      description: "Flexible working hours and remote work options",
+      icon: '⚖️',
+      title: 'Work-Life Balance',
+      description: 'Flexible working hours and remote work options',
     },
   ];
 
   useEffect(() => {
+    // Fetch email for open application
+    const fetchApplicationEmail = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/all-contacts`);
+        const data = response.data[0]; // Take the first item
+        if (data && data.email) {
+          setApplicationEmail(data.email);
+        }
+      } catch (error) {
+        console.error('Error fetching application email:', error);
+        // Keep default email if API fails
+      }
+    };
+
     const fetchJobs = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/show-jobs", {
+        const response = await axios.get(`${BACKEND_URL}/show-jobs`, {
           withCredentials: true,
         });
         const jobData = [
           {
-            department: "Tech Excellence, Development & Research Department",
+            department: 'Tech Excellence, Development & Research Department',
             roles: response.data.map((job) => ({
               title: job.jobRole,
-              type: "Full-time/Part-time",
+              type: 'Full-time/Part-time',
               location: job.workType.charAt(0).toUpperCase() + job.workType.slice(1),
               experience: job.experience,
             })),
@@ -49,33 +67,32 @@ const Careers = () => {
         ];
         setDepartments(jobData);
         setLoading(false);
-      } catch (err) {
-        setError("Failed to fetch job openings.");
+      } catch (error) {
+        setError('Failed to fetch job openings.');
         setLoading(false);
       }
     };
 
+    fetchApplicationEmail();
     fetchJobs();
   }, []);
 
   const handleApply = (role) => {
-    const email = "ishowspeedindia6@gmail.com";
+    const email = applicationEmail; // Use the dynamic email from API
     const subject = `Application for ${role.title} Position 🎉`;
     const body = `Dear Hiring Manager, 🌟\n\nI’m super excited 😊 to apply for the **${role.title}** position at your company! Here are the details of the role I’m applying for:\n\n- **Job Role**: ${role.title} 🚀\n- **Type**: ${role.type} ⏰\n- **Location**: ${role.location} 📍\n- **Experience Required**: ${role.experience} ⭐\n\nI’m thrilled about the chance to join your team and bring my skills to the table! **Please attach your resume** 📄 to showcase your experience—it’d be awesome to see what you’ve got! Feel free to let me know if you need any more info. 🙌\n\nThis opportunity looks amazing, and I can’t wait to hear from you! Thanks for considering me! 😎\n\nBest regards,\n[Your Name] ✍️\n[Your Contact Information] 📞`;
-
+  
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    console.log("Opening mailto link (Apply Now):", mailtoLink);
-    window.open(mailtoLink, "_blank");
+    window.open(mailtoLink, '_blank');
   };
 
   const handleOpenApplication = () => {
-    const email = "ishowspeedindia6@gmail.com";
+    const email = applicationEmail; // Dynamic email from API
     const subject = `Open Application - Ready to Shine! ✨`;
     const body = `Dear Hiring Manager, 🌟\n\nI’m reaching out with enthusiasm 😊 because I’d love to join your incredible team! I might not have a specific role in mind, but I’m packed with skills and ready to make an impact wherever I’m needed! 🚀\n\n**Please attach your resume** 📄 — I’ve got a dazzling showcase of my experience waiting for you! I’m eager to contribute to your mission and bring some sparkle to the table. Let me know how I can fit in or if you need more details! 🌈\n\nThanks for taking a look—this feels like the start of something amazing! 🙌\n\nWarm regards,\n[Your Name] ✍️\n[Your Contact Information] 📞`;
 
     const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    console.log("Opening mailto link (Open Application):", mailtoLink);
-    window.open(mailtoLink, "_blank");
+    window.open(mailtoLink, '_blank');
   };
 
   return (
@@ -105,7 +122,7 @@ const Careers = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,#2a004730,transparent)] animate-pulse pointer-events-none"></div>
         <div className="container mx-auto px-4 relative z-10">
           <h2 className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-            Open Positions
+            Open positions at other companies
           </h2>
           <div className="space-y-8 sm:space-y-12">
             {loading ? (

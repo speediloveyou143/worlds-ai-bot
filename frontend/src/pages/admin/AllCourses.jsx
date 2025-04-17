@@ -2,13 +2,15 @@ import React from "react";
 import axios from "axios";
 import {Link} from "react-router-dom"
 import { useState, useEffect } from "react";
+import { BACKEND_URL } from "../../../config/constant";
+
 
 function Course(props) {
   async function handleDelete() {
     try {
       if (window.confirm("are you sure you want to delete this course?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-course/${props.data._id}`,
+          `${BACKEND_URL}/delete-course/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -82,7 +84,7 @@ function AllCourses() {
   const [courses, setCourses] = useState([]);
 
   async function fetchCourses() {
-    const response = await axios.get("http://localhost:4000/show-courses", {
+    const response = await axios.get(`${BACKEND_URL}/show-courses`, {
       withCredentials: true,
     });
     setCourses(response?.data?.data);

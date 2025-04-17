@@ -3,13 +3,14 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function Row(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this roadmap topic?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-roadmap-topic/${props.data._id}`,
+          `${BACKEND_URL}/delete-roadmap-topic/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -44,7 +45,7 @@ function AllRoadMapTopics() {
 
   async function fetchRoadMapTopics() {
     try {
-      const response = await axios.get("http://localhost:4000/show-roadmap-topic", {
+      const response = await axios.get(`${BACKEND_URL}/show-roadmap-topic`, {
         withCredentials: true,
       });
       setRoadMapData(response?.data);

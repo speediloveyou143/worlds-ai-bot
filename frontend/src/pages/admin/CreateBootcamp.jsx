@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
 
 const CreateBootcamp = () => {
   const [formData, setFormData] = useState({
@@ -69,7 +70,7 @@ const CreateBootcamp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:4000/create-bootcamp', formData);
+      const response = await axios.post(`${BACKEND_URL}/create-bootcamp`, formData,{ withCredentials: true });
       setNotification({ message: 'Bootcamp created successfully!', type: 'success' });
     } catch (error) {
       setNotification({ message: error.response?.data?.message || 'An error occurred', type: 'error' });

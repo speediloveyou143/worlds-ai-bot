@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateRecordings() {
   const [batch, setBatch] = useState({
@@ -72,12 +73,11 @@ function CreateRecordings() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Batch Data:", batch); // Log the full batch data to verify
 
     if (validate()) {
       try {
         const response = await axios.post(
-          "http://localhost:4000/create-recordings",
+          `${BACKEND_URL}/create-recordings`,
           {
             batchNumber: batch.batchNumber,
             recordings: batch.videos.map((video) => ({

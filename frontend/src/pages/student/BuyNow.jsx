@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-
+import { BACKEND_URL } from "../../../config/constant";
+import { RAZORPAY_KEY } from "../../../config/constant";
 function BuyNow() {
   const { id, courseId } = useParams();
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState(null);
   const [roadmapData, setRoadmapData] = useState(null);
-  const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [isPaymentSectionVisible, setIsPaymentSectionVisible] = useState(false);
 
   const { user } = useSelector((state) => state.user);
@@ -17,7 +17,7 @@ function BuyNow() {
   useEffect(() => {
     const fetchRoadmapData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-roadmap/${id}`);
+        const response = await axios.get(`${BACKEND_URL}/show-roadmap/${id}`);
         setRoadmapData(response.data);
       } catch (error) {
         // Handle error silently
@@ -26,8 +26,13 @@ function BuyNow() {
 
     const fetchCourseData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-course/${courseId}`);
-        setCourseData(response.data);
+        const response = await axios.get(`${BACKEND_URL}/show-course/${courseId}`);
+        // Simulate offerPrice for demo (70% discount)
+        const data = {
+          ...response.data,
+          offerPrice: response.data.price * 0.3, // 70% discount (30% of original price)
+        };
+        setCourseData(data);
       } catch (error) {
         // Handle error silently
       }
@@ -54,12 +59,6 @@ function BuyNow() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const calculateTotal = () => {
-    if (!courseData) return 0;
-    const gst = courseData.price * 0.18;
-    return courseData.price + gst;
-  };
-
   const handlePayment = () => {
     if (!user) {
       navigate("/signup");
@@ -71,17 +70,12 @@ function BuyNow() {
       return;
     }
 
-    if (!agreeToTerms) {
-      alert("Please agree to the terms and conditions to proceed.");
-      return;
-    }
-
-    const { courseName, price, imageUrl, recordingId } = courseData;
-    const totalAmount = calculateTotal();
+    const { courseName, price, offerPrice, imageUrl, recordingId } = courseData;
+    const finalPrice = offerPrice || price; // Use offerPrice if available, else price
 
     const options = {
-      key: "rzp_test_J6YU5UDuMKPdrW",
-      amount: totalAmount * 100,
+      key: RAZORPAY_KEY,
+      amount: finalPrice * 100, // Pay only offerPrice (tax not included)
       currency: "INR",
       name: "World's AI Bot",
       description: courseName,
@@ -91,7 +85,7 @@ function BuyNow() {
           courses: [
             {
               transactionId: response.razorpay_payment_id,
-              amount: totalAmount,
+              amount: finalPrice,
               status: true,
               email: email,
               name: name,
@@ -102,7 +96,7 @@ function BuyNow() {
         };
 
         try {
-          await axios.put(`http://localhost:4000/update-user/${_id}`, paymentData);
+          await axios.put(`${BACKEND_URL}/update-user/${_id}`, paymentData);
           alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
         } catch (error) {
           // Handle error silently
@@ -186,13 +180,13 @@ function BuyNow() {
             <div className="mt-4 lg:mt-8 bg-gray-800 p-2 lg:p-6 rounded-lg shadow-lg border border-gray-700">
               <div className="flex items-center gap-2 lg:gap-4">
                 <img
-                  src="https://via.placeholder.com/100"
-                  alt="Tutor"
+                  src={roadmapData.tutorImageUrl || "https://via.placeholder.com/100"}
+                  alt={roadmapData.tutorName || "Tutor"}
                   className="w-16 h-16 lg:w-24 lg:h-24 rounded-lg border-2 border-purple-500 object-cover"
                 />
                 <div>
-                  <h2 className="text-lg lg:text-xl font-semibold text-purple-400">Tutor Name</h2>
-                  <p className="mt-1 lg:mt-2 text-gray-300">Tutor description goes here. This is a brief description of the tutor's experience and expertise.</p>
+                  <h2 className="text-lg lg:text-xl font-semibold text-purple-400">{roadmapData.tutorName || "Tutor Name"}</h2>
+                  <p className="mt-1 lg:mt-2 text-gray-300">{roadmapData.tutorDescription || "Tutor description goes here."}</p>
                 </div>
               </div>
             </div>
@@ -205,29 +199,14 @@ function BuyNow() {
           <>
             <h1 className="text-lg lg:text-2xl font-bold text-white">{courseData.courseName}</h1>
             <img src={courseData.imageUrl} alt={courseData.courseName} className="w-full h-32 lg:h-48 object-cover rounded-lg mt-2 lg:mt-4" />
-            <h2 className="text-base lg:text-xl font-semibold text-purple-400 mt-2 lg:mt-4">Price: ₹{courseData.price}</h2>
-            <p className="text-gray-300 mt-1 lg:mt-2">GST (18%): ₹{(courseData.price * 0.18).toFixed(2)}</p>
-            <p className="text-lg lg:text-xl font-semibold text-purple-400 mt-2 lg:mt-4">Total: ₹{calculateTotal().toFixed(2)}</p>
-            <div className="mt-2 lg:mt-4 flex items-center">
-              <input
-                type="checkbox"
-                id="terms"
-                checked={agreeToTerms}
-                onChange={(e) => setAgreeToTerms(e.target.checked)}
-                className="mr-2"
-              />
-              <label htmlFor="terms" className="text-gray-300">
-                I agree to the terms and conditions
-              </label>
-            </div>
+            <h2 className="text-base lg:text-xl font-semibold text-gray-400 mt-2 lg:mt-4 line-through">Original Price: ₹{courseData.price}</h2>
+            <h2 className="text-base lg:text-xl font-semibold text-purple-400">Offer Price: ₹{courseData.offerPrice.toFixed(2)} (70% OFF)</h2>
+            <p className="text-gray-300 mt-1 lg:mt-2">Tax (5%): ₹{(courseData.offerPrice * 0.05).toFixed(2)}</p>
+            <p className="text-gray-300 mt-1 lg:mt-2">Tax Discount: -₹{(courseData.offerPrice * 0.05).toFixed(2)}</p>
+            <p className="text-lg lg:text-xl font-semibold text-purple-400 mt-2 lg:mt-4">Total: ₹{courseData.offerPrice.toFixed(2)}</p>
             <button
-              className={`w-full mt-2 lg:mt-6 text-white py-2 lg:py-3 rounded-lg font-semibold transition-all shadow-lg ${
-                agreeToTerms
-                  ? "bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-blue-500/50"
-                  : "bg-gray-600 cursor-not-allowed"
-              }`}
+              className="w-full mt-2 lg:mt-6 text-white py-2 lg:py-3 rounded-lg font-semibold transition-all shadow-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 hover:shadow-blue-500/50"
               onClick={handlePayment}
-              disabled={!agreeToTerms}
             >
               Buy Now
             </button>

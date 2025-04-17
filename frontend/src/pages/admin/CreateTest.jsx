@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateTest() {
   const [formData, setFormData] = useState({
@@ -53,7 +54,7 @@ function CreateTest() {
       setFormError("");
       setSuccessMessage("");
       const response = await axios.post(
-        "http://localhost:4000/create-test",
+        `${BACKEND_URL}/create-test`,
         formData,
         { withCredentials: true }
       );

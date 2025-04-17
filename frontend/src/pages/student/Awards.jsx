@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import jsPDF from "jspdf";
 import axios from "axios";
+import { BACKEND_URL } from '../../../config/constant';
 
 const CertificateCard = ({ data, type, onDownload }) => {
   const getTitle = () => {
@@ -147,7 +148,7 @@ function Awards() {
   useEffect(() => {
     const fetchCertificates = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-user/${id}`);
+        const response = await axios.get(`${BACKEND_URL}}/show-user/${id}`);
         setCertificates(response.data);
       } catch (error) {}
     };

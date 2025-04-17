@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdatePrivacy() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function UpdatePrivacy() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/show-privacy/${id}`)
+      .get(`${BACKEND_URL}/show-privacy/${id}`)
       .then((response) => {
         setHeading(response.data.heading);
         setParagraph(response.data.paragraph);
@@ -29,7 +30,7 @@ function UpdatePrivacy() {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:4000/update-privacy/${id}`,
+        `${BACKEND_URL}/update-privacy/${id}`,
         { heading, paragraph }
       );
       if (response.status === 200) {

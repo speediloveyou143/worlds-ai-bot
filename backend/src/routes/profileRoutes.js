@@ -1,7 +1,9 @@
 const express = require("express");
 const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
 const User=require('../models/userModel')
 const router = express.Router();
+
 
 router.get("/profile", userAuth, async (req, res) => {
   try {
@@ -15,7 +17,7 @@ router.get("/profile", userAuth, async (req, res) => {
   }
 });
 
-router.get('/show-profiles',async(req,res)=>{
+router.get('/show-profiles',userAuth,adminAuth,async(req,res)=>{
  try{ const response=await User.find()
   if(!response){
     return res.status(400).json({message:"records not found"})
@@ -26,7 +28,7 @@ router.get('/show-profiles',async(req,res)=>{
   }
 })
 
-router.get("/show-user/:id", async (req, res) => {
+router.get("/show-user/:id",userAuth,adminAuth, async (req, res) => {
   try {
     const UserData = await User.findById(req.params.id);
     if (!UserData) {
@@ -38,7 +40,7 @@ router.get("/show-user/:id", async (req, res) => {
   }
 });
 
-router.patch("/profile/edit", userAuth, async (req, res) => {
+router.patch("/profile/edit", userAuth,adminAuth, async (req, res) => {
 try {
     const { name, universityName, number } = req.body;
     const loggedInUser = req.user;
@@ -58,9 +60,7 @@ try {
   }
 });
 
-router.put('/update-user/:id', async (req, res) => {
-  console.log(req.params.id);
-  console.log(req.body);
+router.put('/update-user/:id',userAuth,adminAuth, async (req, res) => {
 
   try {
     const userId = req.params.id;
@@ -101,7 +101,7 @@ router.put('/update-user/:id', async (req, res) => {
 
 
 
-router.delete("/delete-profile/:id",async (req, res) => {
+router.delete("/delete-profile/:id",userAuth,adminAuth,async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {

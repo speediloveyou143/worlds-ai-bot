@@ -3,13 +3,14 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function Row(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this job?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-job/${props.data._id}`,
+          `${BACKEND_URL}/delete-job/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -45,7 +46,7 @@ function AllJobs() {
 
   async function fetchJobs() {
     try {
-      const response = await axios.get("http://localhost:4000/show-jobs", {
+      const response = await axios.get(`${BACKEND_URL}/show-jobs`, {
         withCredentials: true,
       });
       setJobData(response?.data);

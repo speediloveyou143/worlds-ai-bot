@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateData() {
   const { id } = useParams(); // Get the contact ID from the URL
@@ -28,7 +29,7 @@ function UpdateData() {
     async function fetchContact() {
       try {
         const response = await axios.get(
-          `http://localhost:4000/show-contact/${id}`, // Updated to match your route
+          `${BACKEND_URL}/show-contact/${id}`, // Updated to match your route
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -97,7 +98,7 @@ function UpdateData() {
       setSuccessMessage("");
       const updatedContact = { ...formData };
       const response = await axios.put(
-        `http://localhost:4000/update-contact/${id}`, // Updated to match your route
+        `${BACKEND_URL}/update-contact/${id}`, // Updated to match your route
         updatedContact,
         { withCredentials: true }
       );

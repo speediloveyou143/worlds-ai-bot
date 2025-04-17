@@ -1,5 +1,6 @@
-
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { Provider, useSelector } from "react-redux";
 import Home from "./pages/student/Home";
 import Courses from "./pages/student/Courses";
 import Contact from "./pages/student/Contact";
@@ -8,8 +9,6 @@ import Signup from "./pages/authentication/Signup";
 import StudentDashboard from "./pages/student/StudentDashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import Profile from "./pages/student/Profile";
-import { BrowserRouter } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
 import appStore from "./redux/appStore";
 import Body from "./components/Body";
 import Lectures from "./pages/student/Lectures";
@@ -17,7 +16,6 @@ import Resume from "./pages/student/Resume";
 import Interview from "./pages/student/Interview";
 import Editor from "./pages/student/Editor";
 import Awards from "./pages/student/Awards";
-import Invoice from "./pages/student/Invoice";
 import AllCourses from "./pages/admin/AllCourses";
 import AllUsers from "./pages/admin/AllUsers";
 import CreateCourse from "./pages/admin/CreateCourse";
@@ -42,8 +40,8 @@ import CreateVideo from "./pages/admin/CreateVideo";
 import AllVideos from "./pages/admin/AllVideos";
 import UpdateVideos from "./pages/admin/UpdateVideos";
 import About from "./pages/student/About";
-import Products from './pages/student/Products';
-import Carrers from './pages/student/Carrers';
+import Products from "./pages/student/Products";
+import Carrers from "./pages/student/Carrers";
 import Terms from "./pages/student/Terms";
 import CreatePrivacy from "./pages/admin/CreatePrivacy";
 import AllPrivacy from "./pages/admin/AllPrivacy";
@@ -67,13 +65,29 @@ import CreateTest from "./pages/admin/CreateTest";
 import AllTests from "./pages/admin/AllTests";
 import UpdateTest from "./pages/admin/UpdateTest";
 import NotFoundPage from "./pages/NotFoundPage";
+import ResetPassword from "./pages/student/ResetPassword";
+import ResetPasswordRequest from "./pages/student/ResetPasswordRequest";
 
-// Separate component for routes that needs Redux context
-function AppRoutes() {
+// Protected Route Wrapper
+function ProtectedRoute({ element: Element, allowedRole }) {
   const { user } = useSelector((state) => state.user);
-  const name = user?.name;
   const role = user?.role;
 
+  if (!user) {
+    // Redirect to signin if no user is logged in
+    return null
+  }
+
+  if (role !== allowedRole) {
+    // Redirect to home if role doesn't match
+    return <Navigate to="/" replace />;
+  }
+
+  return <Element />;
+}
+
+// Separate component for routes
+function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Body />}>
@@ -86,73 +100,75 @@ function AppRoutes() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/buy-now/:id/:courseId" element={<BuyNow />} />
-        <Route path="/privacy-policy" element={<Terms/>} />
-        <Route path="/free-class/:id" element={<FreeClass/>} />
-        <Route path="/register-successful" element={<Thanks/>} />
-        
-        <Route path="/student-dashboard/profile" element={<StudentDashboard />}>
+        <Route path="/privacy-policy" element={<Terms />} />
+        <Route path="/free-class/:id" element={<FreeClass />} />
+        <Route path="/register-successful" element={<Thanks />} />
+        <Route path="/reset-password-request" element={<ResetPasswordRequest />} />
+
+        {/* Student Dashboard */}
+        <Route
+          path="/student-dashboard/profile"
+          element={<ProtectedRoute element={StudentDashboard} allowedRole="student" />}
+        >
           <Route index element={<Profile />} />
           <Route path="lectures" element={<Lectures />} />
           <Route path="awards" element={<Awards />} />
           <Route path="resume-templates" element={<Resume />} />
           <Route path="interview-preparation" element={<Interview />} />
           <Route path="editor" element={<Editor />} />
-          <Route path="invoice" element={<Invoice />} />
           <Route path="recordings/:id" element={<Recordings />} />
         </Route>
 
-        <Route 
-          path="/admin-dashboard" 
-          element={role === 'admin' ? <AdminDashboard /> : <NotFoundPage />}
+        {/* Admin Dashboard */}
+        <Route
+          path="/admin-dashboard"
+          element={<ProtectedRoute element={AdminDashboard} allowedRole="admin" />}
         >
-          {role === 'admin' && (
-            <>
-              <Route index element={<Profile />} />
-              <Route path="profile/all-users" element={<AllUsers />} />
-              <Route path="profile/update-user/:id" element={<UpdateUser />} />
-              <Route path="profile/update-pc/:id" element={<UpdatePc />} />
-              <Route path="profile/update-ic/:id" element={<UpdateIc />} />
-              <Route path="profile/update-cc/:id" element={<UpdateCc />} />
-              <Route path="profile/update-invoice/:id" element={<UpdateInvoice />} />
-              <Route path="profile/all-courses" element={<AllCourses />} />
-              <Route path="profile/all-courses/:id" element={<UpdateCourse />} />
-              <Route path="profile/all-roadmaps" element={<AllRoadMaps />} />
-              <Route path="profile/create-course" element={<CreateCourse />} />
-              <Route path="profile/create-road-map" element={<CreateRoadmap />} />
-              <Route path="profile/update-road-map/:id" element={<UpdateRoadMap />} />
-              <Route path="profile/create-recordings" element={<CreateRecordings />} />
-              <Route path="profile/all-recordings" element={<AllRecordings />} />
-              <Route path="profile/update-recordings/:id" element={<UpdateRecordings />} />
-              <Route path="profile/create-logo" element={<CreateLogo />} />
-              <Route path="profile/all-company-logos" element={<AllCompanyLogos />} />
-              <Route path="profile/update-company/:id" element={<UpdateCompany />} />
-              <Route path="profile/create-video" element={<CreateVideo />} />
-              <Route path="profile/all-videos" element={<AllVideos />} />
-              <Route path="profile/update-video/:id" element={<UpdateVideos />} />
-              <Route path="profile/create-privacy" element={<CreatePrivacy/>} />
-              <Route path="profile/all-privacy" element={<AllPrivacy/>} />
-              <Route path="profile/update-privacy/:id" element={<UpdatePrivacy/>} />
-              <Route path="profile/all-registers" element={<AllRegisters/>} />
-              <Route path="profile/create-bootcamp" element={<CreateBootcamp/>} />
-              <Route path="profile/all-bootcamps" element={<AllBootcamps/>} />
-              <Route path="profile/update-bootcamp/:id" element={<UpdateBootcamp/>} />
-              <Route path="profile/create-road-map-topics" element={<CreateRoadMapTopics/>} />
-              <Route path="profile/all-road-map-topics" element={<AllRoadMapTopics/>} />
-              <Route path="profile/update-road-map-topics/:id" element={<UpdateRoadMapTopics/>} />
-              <Route path="profile/create-job" element={<CreateJob/>} />
-              <Route path="profile/all-jobs" element={<AllJobs/>} />
-              <Route path="profile/update-job/:id" element={<UpdateJob/>} />
-              <Route path="profile/create-data" element={<CreateData/>} />
-              <Route path="profile/all-create-data" element={<AllData/>} />
-              <Route path="profile/update-create-data/:id" element={<UpdateData/>} />
-              <Route path="profile/create-test" element={<CreateTest/>} />
-              <Route path="profile/all-tests" element={<AllTests/>} />
-              <Route path="profile/update-test/:id" element={<UpdateTest/>} />
-            </>
-          )}
+          <Route index element={<Profile />} />
+          <Route path="profile/all-users" element={<AllUsers />} />
+          <Route path="profile/update-user/:id" element={<UpdateUser />} />
+          <Route path="profile/update-pc/:id" element={<UpdatePc />} />
+          <Route path="profile/update-ic/:id" element={<UpdateIc />} />
+          <Route path="profile/update-cc/:id" element={<UpdateCc />} />
+          <Route path="profile/update-invoice/:id" element={<UpdateInvoice />} />
+          <Route path="profile/all-courses" element={<AllCourses />} />
+          <Route path="profile/all-courses/:id" element={<UpdateCourse />} />
+          <Route path="profile/all-roadmaps" element={<AllRoadMaps />} />
+          <Route path="profile/create-course" element={<CreateCourse />} />
+          <Route path="profile/create-road-map" element={<CreateRoadmap />} />
+          <Route path="profile/update-road-map/:id" element={<UpdateRoadMap />} />
+          <Route path="profile/create-recordings" element={<CreateRecordings />} />
+          <Route path="profile/all-recordings" element={<AllRecordings />} />
+          <Route path="profile/update-recordings/:id" element={<UpdateRecordings />} />
+          <Route path="profile/create-logo" element={<CreateLogo />} />
+          <Route path="profile/all-company-logos" element={<AllCompanyLogos />} />
+          <Route path="profile/update-company/:id" element={<UpdateCompany />} />
+          <Route path="profile/create-video" element={<CreateVideo />} />
+          <Route path="profile/all-videos" element={<AllVideos />} />
+          <Route path="profile/update-video/:id" element={<UpdateVideos />} />
+          <Route path="profile/create-privacy" element={<CreatePrivacy />} />
+          <Route path="profile/all-privacy" element={<AllPrivacy />} />
+          <Route path="profile/update-privacy/:id" element={<UpdatePrivacy />} />
+          <Route path="profile/all-registers" element={<AllRegisters />} />
+          <Route path="profile/create-bootcamp" element={<CreateBootcamp />} />
+          <Route path="profile/all-bootcamps" element={<AllBootcamps />} />
+          <Route path="profile/update-bootcamp/:id" element={<UpdateBootcamp />} />
+          <Route path="profile/create-road-map-topics" element={<CreateRoadMapTopics />} />
+          <Route path="profile/all-road-map-topics" element={<AllRoadMapTopics />} />
+          <Route path="profile/update-road-map-topics/:id" element={<UpdateRoadMapTopics />} />
+          <Route path="profile/create-job" element={<CreateJob />} />
+          <Route path="profile/all-jobs" element={<AllJobs />} />
+          <Route path="profile/update-job/:id" element={<UpdateJob />} />
+          <Route path="profile/create-data" element={<CreateData />} />
+          <Route path="profile/all-create-data" element={<AllData />} />
+          <Route path="profile/update-create-data/:id" element={<UpdateData />} />
+          <Route path="profile/create-test" element={<CreateTest />} />
+          <Route path="profile/all-tests" element={<AllTests />} />
+          <Route path="profile/update-test/:id" element={<UpdateTest />} />
         </Route>
       </Route>
-      <Route path="*" element={<NotFoundPage/>}></Route>
+      <Route path="*" element={<NotFoundPage />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 }

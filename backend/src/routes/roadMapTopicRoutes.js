@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const RoadMapTopic = require('../models/roadmapTopicsModel'); // Adjust path as needed
+const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
 
 // Create a new roadmap topic
-router.post('/create-roadmap-topic', async (req, res) => {
+router.post('/create-roadmap-topic',userAuth,adminAuth,async (req, res) => {
     try {
         const { roadMapName, id } = req.body;
         if (!roadMapName || !id) {
@@ -46,7 +48,7 @@ router.get('/show-roadmap-topic/:id', async (req, res) => {
 });
 
 // Update a roadmap topic
-router.patch('/update-roadmap-topic/:id', async (req, res) => {
+router.patch('/update-roadmap-topic/:id',userAuth ,adminAuth, async (req, res) => {
     try {
         const { roadMapName, id: roadMapId } = req.body;
         const roadMapTopic = await RoadMapTopic.findByIdAndUpdate(
@@ -65,7 +67,7 @@ router.patch('/update-roadmap-topic/:id', async (req, res) => {
 });
 
 // Delete a roadmap topic
-router.delete('/delete-roadmap-topic/:id', async (req, res) => {
+router.delete('/delete-roadmap-topic/:id',userAuth ,adminAuth, async (req, res) => {
     try {
         const roadMapTopic = await RoadMapTopic.findByIdAndDelete(req.params.id);
         if (!roadMapTopic) {

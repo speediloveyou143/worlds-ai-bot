@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateVideos() {
   const { id } = useParams();
@@ -14,7 +15,7 @@ function UpdateVideos() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/show-video/${id}`, { withCredentials: true })
+      .get(`${BACKEND_URL}/show-video/${id}`, { withCredentials: true })
       .then((response) => {
         setVideoUrl(response.data.videoUrl);
         setJobRole(response.data.jobRole);
@@ -35,7 +36,7 @@ function UpdateVideos() {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:4000/update-video/${id}`,
+        `${BACKEND_URL}/update-video/${id}`,
         { videoUrl, jobRole, name, package: packageAmount, companyName },
         { withCredentials: true }
       );

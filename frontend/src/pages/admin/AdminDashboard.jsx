@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -6,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { clearUser } from "../../redux/userSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function AdminDashboard() {
   const { user } = useSelector((state) => state.user);
@@ -13,9 +13,8 @@ function AdminDashboard() {
   const one = name.length > 1 ? name[0] + name[1] : name[0] || "G";
   const [isMoreOpen, setIsMoreOpen] = useState(false);
   const location = useLocation();
-  const dispatch =useDispatch();
-  const navigate=useNavigate()
-  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const sidebarOptions = [
     { to: "/admin-dashboard", icon: "bi bi-person-circle", label: "Profile" },
@@ -63,7 +62,7 @@ function AdminDashboard() {
 
   const handleSignOut = async () => {
     try {
-      await axios.post("http://localhost:4000/signout", {}, { withCredentials: true });
+      await axios.post(`${BACKEND_URL}/signout`, {}, { withCredentials: true });
       dispatch(clearUser());
       navigate("/signin");
     } catch (error) {
@@ -93,7 +92,7 @@ function AdminDashboard() {
                     isActive(option.to) ? "bg-blue-900/50 border-l-4 border-blue-500" : ""
                   }`}
                 >
-                  <i className={option.icon}></i>  {option.label}
+                  <i className={option.icon}></i> {option.label}
                 </button>
               </Link>
               {/* Add a subtle separator after "All" items for grouped pairs */}
@@ -109,7 +108,7 @@ function AdminDashboard() {
           className="w-full text-left p-3 rounded-lg hover:bg-blue-900/30 transition-all duration-200 mt-auto"
           onClick={handleSignOut}
         >
-          <i className="bi bi-box-arrow-right"></i>  Sign Out
+          <i className="bi bi-box-arrow-right"></i> Sign Out
         </button>
       </div>
 
@@ -143,7 +142,7 @@ function AdminDashboard() {
           </button>
 
           {isMoreOpen && (
-            <div className="absolute bottom-14 right-0 bg-gray-900/70 backdrop-blur-md p-2 rounded-lg border border-blue-800/30">
+            <div className="absolute bottom-14 right-0 w-64 max-h-64 overflow-y-auto bg-gray-900/90 backdrop-blur-md p-4 rounded-lg border border-blue-800/30 shadow-lg">
               {hiddenOptions.map((option, index) => (
                 <Link
                   key={index}

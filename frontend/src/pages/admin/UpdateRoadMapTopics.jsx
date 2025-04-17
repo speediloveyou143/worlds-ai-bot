@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateRoadMapTopics() {
   const { id } = useParams();
@@ -11,7 +12,7 @@ function UpdateRoadMapTopics() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/show-roadmap-topic/${id}`, { withCredentials: true })
+      .get(`${BACKEND_URL}/show-roadmap-topic/${id}`, { withCredentials: true })
       .then((response) => {
         setRoadMapName(response.data.roadMapName);
         setRoadMapId(response.data.id);
@@ -29,7 +30,7 @@ function UpdateRoadMapTopics() {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:4000/update-roadmap-topic/${id}`,
+        `${BACKEND_URL}/update-roadmap-topic/${id}`,
         { roadMapName, id: roadMapId },
         { withCredentials: true }
       );

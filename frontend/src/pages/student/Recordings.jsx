@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { BACKEND_URL } from '../../../config/constant';
+
 
 function Recordings() {
   const { id } = useParams();
@@ -12,7 +14,7 @@ function Recordings() {
     const fetchRecordings = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/show-recordings/${id}`
+          `${BACKEND_URL}/show-recordings/${id}`
         );
         const { recordings } = response.data;
         setRecordings(recordings);

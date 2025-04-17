@@ -1,7 +1,37 @@
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { BACKEND_URL } from '../../../config/constant';
 
-import React from "react";
 
 const Thanks = () => {
+  const [contactData, setContactData] = useState({
+    group: 'https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK',
+    email: 'nandharapu1234@gmail.com',
+    number: '+1 (123) 456-7890',
+  });
+
+  useEffect(() => {
+    // Fetch group, email, and number data
+    const fetchContactData = async () => {
+      try {
+        const response = await axios.get(`${BACKEND_URL}/all-contacts`);
+        const data = response.data[0]; // Take the first item
+        if (data) {
+          setContactData({
+            group: data.group || 'https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK',
+            email: data.email || 'nandharapu1234@gmail.com',
+            number: data.number || '+1 (123) 456-7890',
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching contact data:', error);
+        // Keep default values if API fails
+      }
+    };
+
+    fetchContactData();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 to-blue-950 text-white flex items-start md:items-center justify-center relative overflow-hidden pt-16 md:pt-0">
       {/* Background Decorative Elements */}
@@ -44,10 +74,10 @@ const Thanks = () => {
 
         {/* WhatsApp Button */}
         <a
-          href="https://chat.whatsapp.com/YOUR_WHATSAPP_GROUP_LINK"
+          href={contactData.group}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative px-8 py-4 bg-gradient-to-r from-green-500 to-green-700 rounded-lg font-bold text-lg hover:from-green-600 hover:to-green-800 transition-all transform hover:scale-105 inline-block shadow-lg"
+          className="relative px-8 py-4 bg-gradient-to-r from-green-500 to-green-700 rounded-lg font-bold text-lg hover:from-green-600 hover:to-green-800 transition-all transform hover:scale-105 inline-block shadow-lg mb-6"
         >
           <span className="relative z-10">Join WhatsApp Group</span>
           {/* Glowing Effect */}
@@ -55,12 +85,31 @@ const Thanks = () => {
         </a>
 
         {/* Additional Info */}
-        <p className="text-sm text-gray-400 mt-6">
-          Can’t join? Contact us at{" "}
-          <a href="mailto:support@example.com" className="underline hover:text-blue-400">
-            support@example.com
+        <div className="text-sm text-gray-400 mt-6 space-y-2">
+          <p>
+            Can’t join? Contact us at{' '}
+            <a href={`mailto:${contactData.email}`} className="underline hover:text-blue-400">
+              {contactData.email}
+            </a>
+          </p>
+          <p>
+            Facing any problem with join? Drop a message to WhatsApp or call{' '}
+            <a href={`tel:${contactData.number}`} className="underline hover:text-blue-400">
+              {contactData.number}
+            </a>
+            .
+          </p>
+          <a
+            href={`https://wa.me/${contactData.number.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+              'Need WorldsAIbot help to join'
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-6 py-2 bg-gradient-to-r from-green-500 to-green-700 rounded-lg font-semibold text-sm hover:from-green-600 hover:to-green-800 transition-all transform hover:scale-105 text-[white]"
+          >
+            Message on WhatsApp
           </a>
-        </p>
+        </div>
       </div>
 
       {/* Custom CSS for Animations */}

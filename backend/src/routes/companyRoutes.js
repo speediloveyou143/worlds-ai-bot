@@ -1,7 +1,10 @@
 const express=require('express')
 const router=express.Router()
 const Company=require('../models/companyModel')
-router.post('/create-logo',async(req,res)=>{
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
+
+router.post('/create-logo',userAuth,adminAuth,async(req,res)=>{
     try{const{companyName,logo}=req.body
     if(!companyName || !logo){
       return res.status(422).json({ message: "All fields are required..." });
@@ -25,7 +28,7 @@ router.get('/show-companies', async (req, res) => {
     }
 });
 
-router.get('/show-company/:id', async (req, res) => {
+router.get('/show-company/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const company = await Company.findById(req.params.id);
         if (!company) {
@@ -37,7 +40,7 @@ router.get('/show-company/:id', async (req, res) => {
     }
 });
 
-router.patch('/update-company/:id', async (req, res) => {
+router.patch('/update-company/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const { companyName, logo } = req.body;
         const company = await Company.findByIdAndUpdate(req.params.id, { companyName, logo }, { new: true });
@@ -50,7 +53,7 @@ router.patch('/update-company/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete-company/:id', async (req, res) => {
+router.delete('/delete-company/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const company = await Company.findByIdAndDelete(req.params.id);
         if (!company) {

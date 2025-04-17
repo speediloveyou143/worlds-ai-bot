@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Privacy = require('../models/privacyModel');
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
 
-router.post('/create-privacy', async (req, res) => {
+
+router.post('/create-privacy',userAuth,adminAuth, async (req, res) => {
     try {
         const { heading, paragraph } = req.body;
         if (!heading || !paragraph) {
@@ -25,7 +28,7 @@ router.get('/show-privacies', async (req, res) => {
     }
 });
 
-router.get('/show-privacy/:id', async (req, res) => {
+router.get('/show-privacy/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const privacy = await Privacy.findById(req.params.id);
         if (!privacy) {
@@ -37,7 +40,7 @@ router.get('/show-privacy/:id', async (req, res) => {
     }
 });
 
-router.patch('/update-privacy/:id', async (req, res) => {
+router.patch('/update-privacy/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const { heading, paragraph } = req.body;
         if (!heading || !paragraph) {
@@ -57,7 +60,7 @@ router.patch('/update-privacy/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete-privacy/:id', async (req, res) => {
+router.delete('/delete-privacy/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const privacy = await Privacy.findByIdAndDelete(req.params.id);
         if (!privacy) {

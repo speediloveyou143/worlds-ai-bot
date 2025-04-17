@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CreateCourseValidate } from "../../utils/createCourseValidate";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateCourse() {
   const { id } = useParams();
@@ -25,7 +26,7 @@ function UpdateCourse() {
   async function courseData() {
     try {
       const response = await axios.get(
-        `http://localhost:4000/show-course/${id}`,
+        `${BACKEND_URL}/show-course/${id}`,
         { withCredentials: true }
       );
       const data = response.data;
@@ -85,7 +86,7 @@ function UpdateCourse() {
 
       const updatedCourseData = { ...formData };
       const response = await axios.patch(
-        `http://localhost:4000/update-course/${id}`,
+        `${BACKEND_URL}/update-course/${id}`,
         updatedCourseData,
         { withCredentials: true }
       );

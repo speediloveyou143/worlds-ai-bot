@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from "../../../config/constant";
+
 
 function AllBootcamps() {
   const [bootcamps, setBootcamps] = useState([]);
@@ -8,8 +10,7 @@ function AllBootcamps() {
   useEffect(() => {
     const fetchBootcamps = async () => {
       try {
-        const response = await axios.get('http://localhost:4000/all-bootcamps');
-        console.log(response.data)
+        const response = await axios.get(`${BACKEND_URL}/all-bootcamps`);
         setBootcamps(response.data);
       } catch (error) {
         console.error('Error fetching bootcamps:', error);
@@ -21,7 +22,7 @@ function AllBootcamps() {
   // Handle delete
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/delete-bootcamp/${id}`);
+      await axios.delete(`${BACKEND_URL}/delete-bootcamp/${id}`,{ withCredentials: true });
       setBootcamps(bootcamps.filter((bootcamp) => bootcamp._id !== id));
       alert('Course deleted successfully!');
     } catch (error) {

@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Bootcamp = require('../models/bootcampModel');
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
 
-router.post('/create-bootcamp', async (req, res) => {
+
+router.post('/create-bootcamp',userAuth,adminAuth, async (req, res) => {
     try {
         const { days, courseName, startDate, endDate, startTime, courseRoadmap, videoUrl, instructors } = req.body;
 
@@ -37,7 +40,7 @@ router.get('/all-bootcamps', async (req, res) => {
     }
 });
 
-router.get('/show-bootcamp/:id', async (req, res) => {
+router.get('/show-bootcamp/:id',async (req, res) => {
     try {
         const bootcamp = await Bootcamp.findById(req.params.id);
         if (!bootcamp) {
@@ -49,7 +52,7 @@ router.get('/show-bootcamp/:id', async (req, res) => {
     }
 });
 
-router.put('/update-bootcamp/:id', async (req, res) => {
+router.put('/update-bootcamp/:id',userAuth,adminAuth,async (req, res) => {
     try {
         const { days, courseName, startDate, endDate, startTime, courseRoadmap, videoUrl, instructors } = req.body;
 
@@ -74,7 +77,7 @@ router.put('/update-bootcamp/:id', async (req, res) => {
     }
 });
 
-router.delete('/delete-bootcamp/:id', async (req, res) => {
+router.delete('/delete-bootcamp/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
         if (!bootcamp) {
@@ -85,5 +88,7 @@ router.delete('/delete-bootcamp/:id', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+
 
 module.exports = router;

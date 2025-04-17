@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateBootcamp() {
   const { id } = useParams();
@@ -18,7 +19,7 @@ function UpdateBootcamp() {
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-bootcamp/${id}`);
+        const response = await axios.get(`${BACKEND_URL}/show-bootcamp/${id}`);
         const data = response.data;
 
         // Convert dates to YYYY-MM-DD format
@@ -74,7 +75,7 @@ function UpdateBootcamp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:4000/update-bootcamp/${id}`, formData);
+      await axios.put(`${BACKEND_URL}/update-bootcamp/${id}`, formData,{ withCredentials: true });
       alert('Course updated successfully!');
     } catch (error) {
       console.error('Error updating course:', error);

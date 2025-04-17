@@ -4,7 +4,6 @@ const authRoutes=require('./routes/authRoutes')
 const profileRoutes=require('./routes/profileRoutes')
 const courseRoutes=require("./routes/courseRoutes")
 const roadMapRoutes=require('./routes/roadMapRoutes')
-const joinerRoutes=require('./routes/joinRoutes')
 const companyRoutes=require('./routes/companyRoutes')
 const recordingRoutes=require('./routes/recordingRoutes')
 const successVideoRoutes=require('./routes/successVideosRoutes')
@@ -24,6 +23,7 @@ const app=express()
 
 connectDb()
 
+
 app.use(cors({
     origin: 'http://localhost:5173',
     credentials:true,
@@ -37,7 +37,6 @@ app.use(authRoutes)
 app.use(profileRoutes)
 app.use(courseRoutes)
 app.use(roadMapRoutes)
-app.use(joinerRoutes)
 app.use(recordingRoutes)
 app.use(companyRoutes)
 app.use(successVideoRoutes)

@@ -2,13 +2,14 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function Row(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this record?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-register/${props.data._id}`,
+          `${BACKEND_URL}/delete-register/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -47,10 +48,9 @@ function AllRegisters() {
 
   async function fetchUsers() {
     try {
-      const response = await axios.get("http://localhost:4000/all-registers", {
+      const response = await axios.get(`${BACKEND_URL}/all-registers`, {
         withCredentials: true,
       });
-      console.log("All users:", response.data);
       setUserData(response.data);
     } catch (err) {
       alert("Something went wrong while fetching users.");
@@ -62,7 +62,7 @@ function AllRegisters() {
   }, []);
 
   return (
-    <div className="h-full w-full overflow-x-scroll overflow-y-scroll">
+    <div className="h-full w-full overflow-x-scroll overflow-y-scroll pb-[80px] sm:pb-[0px]">
       <table className="table table-xs table-pin-rows table-pin-cols">
         <thead>
           <tr>

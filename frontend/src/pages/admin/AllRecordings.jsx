@@ -2,12 +2,14 @@ import React from 'react'
 import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
+
 function RecordingCard(props){
   async function handleDelete() {
       try {
         if (window.confirm("are you sure you want to delete this course?")) {
           const response = await axios.delete(
-            `http://localhost:4000/delete-recordings/${props.data._id}`,
+            `${BACKEND_URL}/delete-recordings/${props.data._id}`,
             { withCredentials: true }
           );
           if (response.status === 200) {
@@ -18,7 +20,6 @@ function RecordingCard(props){
           }
         }
       } catch (error) {
-        console.log("Error deleting course:", error);
         alert("An error occurred while deleting the Recordings.");
       }
     }
@@ -36,9 +37,8 @@ function RecordingCard(props){
 function AllRecordings() {
  const [recordings,setRecordings]=useState([])
  async function fetchRecordings(){
-    const response=await axios.get('http://localhost:4000/show-recordings',{withCredentials:true})
+    const response=await axios.get(`${BACKEND_URL}/show-recordings`,{withCredentials:true})
     setRecordings(response?.data?.data)
-    console.log(response?.data?.data)
  }
 
  useEffect(()=>{

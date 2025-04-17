@@ -3,7 +3,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUser } from "../../redux/userSlice";
-
+import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 function Signin() {
   const [email, setEmail] = useState("prasanthreddy@gmail.com");
   const [password, setPassword] = useState("prasanthreddy@gmail.com");
@@ -24,7 +25,7 @@ function Signin() {
       setFormError("");
 
       const response = await axios.post(
-        "http://localhost:4000/signin",
+        `${BACKEND_URL}/signin`,
         { email, password },
         { withCredentials: true }
       );
@@ -150,16 +151,16 @@ function Signin() {
 
               <p className="text-center text-gray-300 mt-1 md:mt-2">
                 Forgot password?{" "}
-                <a href="#" className="text-sky-500 hover:underline">
+                <Link to="/reset-password-request" className="text-sky-500 hover:underline">
                   Reset
-                </a>
+                </Link>
               </p>
 
               <p className="text-center text-gray-300 mt-1 md:mt-2">
                 Don’t have an account?{" "}
-                <a href="/signup" className="text-sky-500 hover:underline">
+                <Link to="/signup" className="text-sky-500 hover:underline">
                   Sign Up
-                </a>
+                </Link>
               </p>
             </div>
           </>

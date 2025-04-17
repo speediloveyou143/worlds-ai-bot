@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateLogo() {
   const [companyName, setCompanyName] = useState('');
@@ -20,7 +21,7 @@ function CreateLogo() {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:4000/create-logo', { companyName, logo });
+      const response = await axios.post(`${BACKEND_URL}/create-logo`, { companyName, logo });
       if (response.status === 200) {
         setMessage({ text: 'Company logo created successfully!', type: 'success' });
         setCompanyName('');

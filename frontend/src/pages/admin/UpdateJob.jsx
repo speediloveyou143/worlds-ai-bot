@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateJob() {
   const { id } = useParams();
@@ -13,7 +14,7 @@ function UpdateJob() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/show-job/${id}`, { withCredentials: true })
+      .get(`${BACKEND_URL}/show-job/${id}`, { withCredentials: true })
       .then((response) => {
         setExperience(response.data.experience);
         setJobRole(response.data.jobRole);
@@ -32,7 +33,7 @@ function UpdateJob() {
     }
     try {
       const response = await axios.patch(
-        `http://localhost:4000/update-job/${id}`,
+        `${BACKEND_URL}/update-job/${id}`,
         { experience, jobRole, workType },
         { withCredentials: true }
       );

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function Row(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this contact?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-contact/${props.data._id}`,
+          `${BACKEND_URL}/delete-contact/${props.data._id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
           alert("Contact deleted successfully!");
-          window.location.reload();
         } else {
           alert("Failed to delete the contact.");
         }
@@ -82,7 +82,7 @@ function AllData() {
 
   async function fetchContacts() {
     try {
-      const response = await axios.get("http://localhost:4000/all-contacts", {
+      const response = await axios.get(`${BACKEND_URL}/all-contacts`, {
         withCredentials: true,
       });
       setContactData(response?.data);

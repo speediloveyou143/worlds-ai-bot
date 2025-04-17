@@ -2,13 +2,14 @@ import axios from "axios";
 import React from "react";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function Row(props) {
   async function handleDelete() {
     try {
       if (window.confirm("Are you sure you want to delete this privacy entry?")) {
         const response = await axios.delete(
-          `http://localhost:4000/delete-privacy/${props.data._id}`
+          `${BACKEND_URL}/delete-privacy/${props.data._id}`,{withCredentials:true}
         );
         if (response.status === 200) {
           alert("Privacy entry deleted successfully!");
@@ -42,7 +43,7 @@ function AllPrivacy() {
 
   async function fetchPrivacies() {
     try {
-      const response = await axios.get("http://localhost:4000/show-privacies");
+      const response = await axios.get(`${BACKEND_URL}/show-privacies`);
       setPrivacyData(response?.data);
     } catch (err) {
       setPrivacyData([]);

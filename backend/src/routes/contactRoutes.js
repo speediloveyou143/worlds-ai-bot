@@ -3,9 +3,11 @@
 const express = require('express');
 const router = express.Router();
 const Contact = require('../models/contactModel');
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
 
 // Create a new contact entry
-router.post('/create-contact', async (req, res) => {
+router.post('/create-contact',userAuth,adminAuth, async (req, res) => {
   try {
     const { offer, heading, tag, insta, linkedin, youtube, channel, maps, group, email, number, address, logo } = req.body;
 
@@ -47,7 +49,7 @@ router.get('/all-contacts', async (req, res) => {
 });
 
 // Get a specific contact by ID
-router.get('/show-contact/:id', async (req, res) => {
+router.get('/show-contact/:id',userAuth,adminAuth, async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.id);
     if (!contact) {
@@ -60,7 +62,7 @@ router.get('/show-contact/:id', async (req, res) => {
 });
 
 // Update a contact by ID
-router.put('/update-contact/:id', async (req, res) => {
+router.put('/update-contact/:id',userAuth,adminAuth, async (req, res) => {
   try {
     const { offer, heading, tag, insta, linkedin, youtube, channel, maps, group, email, number, address, logo } = req.body;
 
@@ -95,7 +97,7 @@ router.put('/update-contact/:id', async (req, res) => {
 });
 
 // Delete a contact by ID
-router.delete('/delete-contact/:id', async (req, res) => {
+router.delete('/delete-contact/:id',userAuth,adminAuth,async (req, res) => {
   try {
     const contact = await Contact.findByIdAndDelete(req.params.id);
     if (!contact) {

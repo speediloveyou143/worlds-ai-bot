@@ -1,13 +1,18 @@
+
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateRoadMap() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [roadmap, setRoadmap] = useState({
     courseName: "",
+    tutorName: "",
+    tutorDescription: "",
+    tutorImageUrl: "",
     skills: [
       {
         skillName: "",
@@ -24,7 +29,7 @@ function UpdateRoadMap() {
     const fetchRoadmap = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/show-roadmap/${id}`,
+          `${BACKEND_URL}/show-roadmap/${id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -40,9 +45,10 @@ function UpdateRoadMap() {
     fetchRoadmap();
   }, [id]);
 
-  // Handle course name change
-  const handleCourseNameChange = (e) => {
-    setRoadmap({ ...roadmap, courseName: e.target.value });
+  // Handle input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setRoadmap({ ...roadmap, [name]: value });
   };
 
   // Handle skill name change
@@ -100,6 +106,15 @@ function UpdateRoadMap() {
     if (!roadmap.courseName.trim()) {
       newErrors.courseName = "Course Name is required.";
     }
+    if (!roadmap.tutorName.trim()) {
+      newErrors.tutorName = "Tutor Name is required.";
+    }
+    if (!roadmap.tutorDescription.trim()) {
+      newErrors.tutorDescription = "Tutor Description is required.";
+    }
+    if (!roadmap.tutorImageUrl.trim()) {
+      newErrors.tutorImageUrl = "Tutor Image URL is required.";
+    }
     roadmap.skills.forEach((skill, skillIndex) => {
       if (!skill.skillName.trim()) {
         newErrors[`skillName-${skillIndex}`] = "Skill Name is required.";
@@ -120,8 +135,8 @@ function UpdateRoadMap() {
     if (validate()) {
       try {
         const response = await axios.put(
-          `http://localhost:4000/update-roadmap/${id}`,
-          { courseName: roadmap.courseName, skills: roadmap.skills },
+          `${BACKEND_URL}/update-roadmap/${id}`,
+          roadmap,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -147,18 +162,61 @@ function UpdateRoadMap() {
       className="sm:p-6 p-0 sm:pb-0 pb-[120px] bg-[#030712] h-full overflow-y-scroll m-4 rounded shadow-md"
     >
       <div className="mb-4">
-        <label className="block text-white font-medium mb-2">
-          Course Name:
-        </label>
+        <label className="block text-white font-medium mb-2">Course Name:</label>
         <input
           type="text"
+          name="courseName"
           value={roadmap.courseName}
-          onChange={handleCourseNameChange}
+          onChange={handleInputChange}
           placeholder="Enter course name"
           className="w-full px-3 py-2 rounded border border-gray-400"
         />
         {errors.courseName && (
           <p className="text-red-500 text-sm">{errors.courseName}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-white font-medium mb-2">Tutor Name:</label>
+        <input
+          type="text"
+          name="tutorName"
+          value={roadmap.tutorName}
+          onChange={handleInputChange}
+          placeholder="Enter tutor name"
+          className="w-full px-3 py-2 rounded border border-gray-400"
+        />
+        {errors.tutorName && (
+          <p className="text-red-500 text-sm">{errors.tutorName}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-white font-medium mb-2">Tutor Description:</label>
+        <textarea
+          name="tutorDescription"
+          value={roadmap.tutorDescription}
+          onChange={handleInputChange}
+          placeholder="Enter tutor description"
+          className="w-full px-3 py-2 rounded border border-gray-400"
+        />
+        {errors.tutorDescription && (
+          <p className="text-red-500 text-sm">{errors.tutorDescription}</p>
+        )}
+      </div>
+
+      <div className="mb-4">
+        <label className="block text-white font-medium mb-2">Tutor Image URL:</label>
+        <input
+          type="text"
+          name="tutorImageUrl"
+          value={roadmap.tutorImageUrl}
+          onChange={handleInputChange}
+          placeholder="Enter tutor image URL"
+          className="w-full px-3 py-2 rounded border border-gray-400"
+        />
+        {errors.tutorImageUrl && (
+          <p className="text-red-500 text-sm">{errors.tutorImageUrl}</p>
         )}
       </div>
 

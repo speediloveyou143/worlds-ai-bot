@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateRecordings() {
   const { id } = useParams(); // Batch ID from URL params
@@ -17,7 +18,7 @@ function UpdateRecordings() {
     const fetchBatchData = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:4000/show-recordings/${id}`,
+          `${BACKEND_URL}/show-recordings/${id}`,
           { withCredentials: true }
         );
 
@@ -105,7 +106,7 @@ function UpdateRecordings() {
     if (validate()) {
       try {
         const response = await axios.put(
-          `http://localhost:4000/update-recordings/${id}`,
+          `${BACKEND_URL}/update-recordings/${id}`,
           { batchNumber: batch.batchNumber, recordings: batch.videos },
           { withCredentials: true }
         );

@@ -1,15 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const RoadMap = require("../models/roadMapModel");
+const { userAuth } = require("../middlewares/auth");
+const { adminAuth } = require("../middlewares/admin");
 
-router.post("/create-roadmap", async (req, res) => {
+router.post("/create-roadmap", userAuth, adminAuth, async (req, res) => {
   try {
-    const { courseName, skills } = req.body;
-    if (!courseName || !skills) {
+    const { courseName, tutorName, tutorDescription, tutorImageUrl, skills } = req.body;
+    if (!courseName || !tutorName || !tutorDescription || !tutorImageUrl || !skills) {
       return res.status(422).json({ message: "require all fields" });
     }
     const newRoadMap = new RoadMap({
       courseName,
+      tutorName,
+      tutorDescription,
+      tutorImageUrl,
       skills,
     });
     await newRoadMap.save();
@@ -18,6 +23,7 @@ router.post("/create-roadmap", async (req, res) => {
     res.status(400).json({ message: "Error adding road map", error: err });
   }
 });
+
 router.get("/show-roadmaps", async (req, res) => {
   try {
     const roadmap = await RoadMap.find();
@@ -29,6 +35,7 @@ router.get("/show-roadmaps", async (req, res) => {
     res.status(400).json({ message: "Error retrieving road maps", error: err });
   }
 });
+
 router.get("/show-roadmap/:id", async (req, res) => {
   try {
     const roadMap = await RoadMap.findById(req.params.id);
@@ -41,7 +48,7 @@ router.get("/show-roadmap/:id", async (req, res) => {
   }
 });
 
-router.put("/update-roadmap/:id", async (req, res) => {
+router.put("/update-roadmap/:id", userAuth, adminAuth, async (req, res) => {
   try {
     const updatedRoadMap = await RoadMap.findByIdAndUpdate(
       req.params.id,
@@ -57,10 +64,9 @@ router.put("/update-roadmap/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete-roadmap/:id", async (req, res) => {
+router.delete("/delete-roadmap/:id", userAuth, adminAuth, async (req, res) => {
   try {
-    const{id}=req.params
-    console.log(id)
+    const { id } = req.params;
     const deletedRoadMap = await RoadMap.findByIdAndDelete(id);
     if (!deletedRoadMap) {
       return res.status(404).json({ message: "Road map not found" });

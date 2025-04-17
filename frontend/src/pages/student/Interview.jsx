@@ -288,10 +288,6 @@ const Interview = () => {
     });
   };
 
-  const sendReportToWhatsApp = () => {
-    console.log("Sending report to WhatsApp...");
-  };
-
   useEffect(() => {
     if (!listening && transcript && selectedLanguage) {
       setIsListening(false);

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateData() {
   const [formData, setFormData] = useState({
@@ -58,7 +59,7 @@ function CreateData() {
       setSuccessMessage(""); // Clear previous success message
       const contact = { ...formData };
       const response = await axios.post(
-        "http://localhost:4000/create-contact",
+        `${BACKEND_URL}/create-contact`,
         contact,
         { withCredentials: true }
       );

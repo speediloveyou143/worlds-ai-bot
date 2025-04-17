@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { clearUser } from "../../redux/userSlice";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { BACKEND_URL } from '../../../config/constant';
+
 
 function StudentDashboard() {
   const { user } = useSelector((state) => state.user);
@@ -27,7 +29,6 @@ function StudentDashboard() {
     { to: "/student-dashboard/profile/resume-templates", icon: "bi bi-journal-code", label: "Resume" },
     { to: "/student-dashboard/profile/interview-preparation", icon: "bi bi-journal-text", label: "Interview" },
     { to: "/student-dashboard/profile/editor", icon: "bi bi-code-slash", label: "Editor" },
-    { to: "/student-dashboard/profile/invoice", icon: "bi bi-coin", label: "Invoice" },
   ];
 
   const visibleOptions = sidebarOptions.slice(0, 4);
@@ -36,7 +37,7 @@ function StudentDashboard() {
   const isActive = (path) => location.pathname === path;
   const handleSignOut = async () => {
     try {
-      await axios.post("http://localhost:4000/signout", {}, { withCredentials: true });
+      await axios.post(`${BACKEND_URL}/signout`, {}, { withCredentials: true });
       dispatch(clearUser());
       navigate("/signin");
     } catch (error) {

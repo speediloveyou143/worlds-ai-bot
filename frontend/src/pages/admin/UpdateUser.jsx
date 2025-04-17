@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 const UpdateUser = () => {
   const { id } = useParams(); // Get the user ID from the URL parameters
@@ -21,7 +22,7 @@ const UpdateUser = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:4000/show-user/${id}`); // Fetch user data by ID
+        const response = await axios.get(`${BACKEND_URL}/show-user/${id}`,{withCredentials:true}); // Fetch user data by ID
         const userData = response.data;
 
         // Update the form data with the fetched data
@@ -67,7 +68,7 @@ const UpdateUser = () => {
     }
 
     try {
-      await axios.put(`http://localhost:4000/update-user/${id}`, formData); // Update user data
+      await axios.put(`${BACKEND_URL}/update-user/${id}`, formData,{withCredentials:true}); // Update user data
       setMessage("Profile updated successfully!"); // Show success message
     } catch (error) {
       console.error("Error updating user:", error.message);

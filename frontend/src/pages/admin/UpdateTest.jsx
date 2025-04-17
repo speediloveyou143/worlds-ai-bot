@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { BACKEND_URL } from "../../../config/constant";
 
 function UpdateTest() {
   const { id } = useParams();
@@ -15,7 +16,7 @@ function UpdateTest() {
     async function fetchTest() {
       try {
         const response = await axios.get(
-          `http://localhost:4000/show-test/${id}`,
+          `${BACKEND_URL}/show-test/${id}`,
           { withCredentials: true }
         );
         if (response.status === 200) {
@@ -74,7 +75,7 @@ function UpdateTest() {
       setFormError("");
       setSuccessMessage("");
       const response = await axios.put(
-        `http://localhost:4000/update-test/${id}`,
+        `${BACKEND_URL}/update-test/${id}`,
         formData,
         { withCredentials: true }
       );

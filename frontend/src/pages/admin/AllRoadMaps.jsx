@@ -2,12 +2,14 @@ import React from 'react'
 import axios from "axios"
 import { useState,useEffect } from 'react'
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from "../../../config/constant";
+
 function RoadMapCard(props){
     async function handleDelete() {
         try {
           if (window.confirm("are you sure you want to delete this course?")) {
             const response = await axios.delete(
-              `http://localhost:4000/delete-roadmap/${props.data._id}`,
+              `${BACKEND_URL}/delete-roadmap/${props.data._id}`,
               { withCredentials: true }
             );
             if (response.status === 200) {
@@ -18,7 +20,6 @@ function RoadMapCard(props){
             }
           }
         } catch (error) {
-          console.log("Error deleting course:", error);
           alert("An error occurred while deleting the roadmap.");
         }
       }
@@ -36,7 +37,7 @@ function RoadMapCard(props){
 function AllRoadMaps() {
  const [roadMap,setRoadMap]=useState([])
  async function fetchRoadMap(){
-    const response=await axios.get('http://localhost:4000/show-roadmaps',{withCredentials:true})
+    const response=await axios.get(`${BACKEND_URL}/show-roadmaps`,{withCredentials:true})
     setRoadMap(response?.data)
  }
 

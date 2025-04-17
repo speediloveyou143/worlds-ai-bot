@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Course = require("../models/courseModel");
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
 
-router.post("/create-course", async (req, res) => {
+router.post("/create-course",userAuth,adminAuth, async (req, res) => {
     const {courseName,imageUrl,price,duration,enrolled,status,badge,hours,nextId} = req.body;
     try {
         if (!courseName || !imageUrl || !price || !duration || !enrolled || !status || !badge || !hours || !nextId || !recordingId) {
@@ -26,7 +28,8 @@ router.post("/create-course", async (req, res) => {
         return res.status(500).json({message: err});
     }
 });
-router.get("/show-course/:id", async (req, res) => {
+
+router.get("/show-course/:id",async (req, res) => {
     try {
       const CourseData = await Course.findById(req.params.id);
       if (!CourseData) {
@@ -38,7 +41,7 @@ router.get("/show-course/:id", async (req, res) => {
     }
 });
 
-router.get("/show-courses", async (req, res) => {
+router.get("/show-courses",async(req,res) => {
     try {
         const courses = await Course.find();
         res.status(200).json({message: "courses fetched successfully", data: courses});
@@ -47,7 +50,7 @@ router.get("/show-courses", async (req, res) => {
     }
 });
 
-router.patch("/update-course/:id", async (req, res) => {
+router.patch("/update-course/:id",userAuth,userAuth, async (req, res) => {
     const {
       courseName,
       imageUrl,
@@ -116,7 +119,7 @@ router.patch("/update-course/:id", async (req, res) => {
       
 });
 
-router.delete("/delete-course/:id", async (req, res) => {
+router.delete("/delete-course/:id",userAuth,userAuth, async (req, res) => {
     const {id} = req.params;
     try {
         if (!id) {

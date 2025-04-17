@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateRoadMapTopics() {
   const [roadMapName, setRoadMapName] = useState('');
@@ -20,7 +21,7 @@ function CreateRoadMapTopics() {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:4000/create-roadmap-topic', { roadMapName, id });
+      const response = await axios.post(`${BACKEND_URL}/create-roadmap-topic`, { roadMapName, id });
       if (response.status === 200) {
         setMessage({ text: 'Roadmap topic created successfully!', type: 'success' });
         setRoadMapName('');

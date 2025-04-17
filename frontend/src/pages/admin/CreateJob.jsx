@@ -1,6 +1,7 @@
 // components/CreateJob.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateJob() {
   const [experience, setExperience] = useState('');
@@ -23,8 +24,8 @@ function CreateJob() {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:4000/create-job', { experience, jobRole, workType });
-      if (response.status === 200) {
+      const response = await axios.post(`${BACKEND_URL}/create-job`, { experience, jobRole, workType });
+      if (response.status === 200){
         setMessage({ text: 'Job created successfully!', type: 'success' });
         setExperience('');
         setJobRole('');

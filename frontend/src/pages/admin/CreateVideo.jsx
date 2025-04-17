@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { BACKEND_URL } from "../../../config/constant";
 
 function CreateVideo() {
   const [videoUrl, setVideoUrl] = useState('');
@@ -26,7 +27,7 @@ function CreateVideo() {
     if (!validateForm()) return;
 
     try {
-      const response = await axios.post('http://localhost:4000/create-video', {
+      const response = await axios.post(`${BACKEND_URL}/create-video`, {
         videoUrl,
         jobRole,
         name,

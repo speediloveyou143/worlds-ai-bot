@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ProfileUpdateValidate } from "../../utils/profileUpdateValidate";
+import { useSelector } from "react-redux";
+import { BACKEND_URL } from '../../../config/constant';
+
 
 function Profile() {
   const navigate = useNavigate();
@@ -10,10 +13,11 @@ function Profile() {
   const [universityName, setUniversityName] = useState("");
   const [formError, setFormError] = useState("");
   const [greeting, setGreeting] = useState("");
-
+  const { user } = useSelector((state) => state.user);
+  const role = user?.role;
   async function profile() {
     try {
-      const { data } = await axios.get("http://localhost:4000/profile", {
+      const { data } = await axios.get(`${BACKEND_URL}/profile`, {
         withCredentials: true,
       });
       const { name, number, university } = data;
@@ -54,7 +58,7 @@ function Profile() {
 
     try {
       const response = await axios.patch(
-        "http://localhost:4000/profile/edit",
+        `${BACKEND_URL}/profile/edit`,
         { name, universityName, number },
         { withCredentials: true }
       );
@@ -62,8 +66,13 @@ function Profile() {
       if (response.status === 200) {
         setFormError("Profile updated successfully!");
         clearError(() => {
-          navigate("/student-dashboard/profile");
-          window.location.reload();
+          if(role=='admin'){
+            navigate("/admin-dashboard");
+
+          }else{
+            navigate("/student-dashboard/profile");
+
+          }
         });
       } else {
         setFormError(response.message || "An error occurred!");

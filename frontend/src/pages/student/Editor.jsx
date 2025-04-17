@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import axios from "axios";
+import { BACKEND_URL } from '../../../config/constant';
+
 
 const App = () => {
   const [code, setCode] = useState("# Write your Python code here");
@@ -66,7 +68,7 @@ const App = () => {
 
   const fetchQuestions = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/all-tests", {
+      const response = await axios.get(`${BACKEND_URL}/all-tests`, {
         withCredentials: true,
       });
       const data = response.data;

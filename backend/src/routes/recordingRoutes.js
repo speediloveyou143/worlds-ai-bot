@@ -1,8 +1,12 @@
 const express = require("express");
 const Recordings = require("../models/recordingModel");
 const router = express.Router();
+const { userAuth } = require("../middlewares/auth");
+const {adminAuth}=require("../middlewares/admin")
+const {paymentAuth}=require("../middlewares/payment")
 
-router.post("/create-recordings", async (req, res) => {
+
+router.post("/create-recordings",userAuth,adminAuth, async (req, res) => {
   try {
     const { batchNumber, recordings } = req.body;
 
@@ -20,7 +24,7 @@ router.post("/create-recordings", async (req, res) => {
   }
 });
 
-router.get("/show-recordings", async (req, res) => {
+router.get("/show-recordings",userAuth,adminAuth, async (req, res) => {
   try {
     const recordings = await Recordings.find();
     if (recordings.length === 0) {
@@ -33,7 +37,7 @@ router.get("/show-recordings", async (req, res) => {
       .json({ message: "Something went wrong", error: err.message });
   }
 });
-router.get("/show-recordings/:id", async (req, res) => {
+router.get("/show-recordings/:id",userAuth,paymentAuth, async (req, res) => {
   try {
     const RecordingsData = await Recordings.findById(req.params.id);
     if (!RecordingsData) {
@@ -47,7 +51,7 @@ router.get("/show-recordings/:id", async (req, res) => {
   }
 });
 
-router.put("/update-recordings/:id", async (req, res) => {
+router.put("/update-recordings/:id",userAuth,adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -85,7 +89,7 @@ router.put("/update-recordings/:id", async (req, res) => {
   }
 });
 
-router.delete("/delete-recordings/:id", async (req, res) => {
+router.delete("/delete-recordings/:id",userAuth,adminAuth, async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {

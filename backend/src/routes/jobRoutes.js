@@ -2,9 +2,11 @@
 const express = require('express');
 const router = express.Router();
 const Job = require('../models/jobModel');
+const {userAuth}=require('../middlewares/auth')
+const {adminAuth}=require("../middlewares/admin")
 
 // Create a new job
-router.post('/create-job', async (req, res) => {
+router.post('/create-job',userAuth,adminAuth, async (req, res) => {
     try {
         const { experience, jobRole, workType } = req.body;
         if (!experience || !jobRole || !workType) {
@@ -25,7 +27,7 @@ router.post('/create-job', async (req, res) => {
 });
 
 // Get all jobs
-router.get('/show-jobs', async (req, res) => {
+router.get('/show-jobs',async (req, res) => {
     try {
         const jobs = await Job.find();
         res.status(200).json(jobs);
@@ -35,7 +37,7 @@ router.get('/show-jobs', async (req, res) => {
 });
 
 // Get a specific job by ID
-router.get('/show-job/:id', async (req, res) => {
+router.get('/show-job/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const job = await Job.findById(req.params.id);
         if (!job) {
@@ -48,7 +50,7 @@ router.get('/show-job/:id', async (req, res) => {
 });
 
 // Update a job
-router.patch('/update-job/:id', async (req, res) => {
+router.patch('/update-job/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const { experience, jobRole, workType } = req.body;
         const job = await Job.findByIdAndUpdate(
@@ -67,7 +69,7 @@ router.patch('/update-job/:id', async (req, res) => {
 });
 
 // Delete a job
-router.delete('/delete-job/:id', async (req, res) => {
+router.delete('/delete-job/:id',userAuth,adminAuth, async (req, res) => {
     try {
         const job = await Job.findByIdAndDelete(req.params.id);
         if (!job) {
